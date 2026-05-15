@@ -1,0 +1,27 @@
+<div class="panel waiting-panel">
+  <button class="btn-back" (click)="leave()">‹ LEAVE</button>
+  <h2 class="panel-title">WAITING FOR OPPONENT</h2>
+  <p class="panel-sub">Share this room code with your friend</p>
+
+  <div class="room-code-wrap">
+    <p class="rc-label">ROOM CODE</p>
+    <button class="rc-value" type="button" (click)="copy()" title="Copy room code">
+      {{ room().code }}
+    </button>
+    <button class="btn-copy" type="button" (click)="copy()">
+      {{ copied ? 'COPIED' : 'COPY CODE' }}
+    </button>
+  </div>
+
+  <div class="wait-loader" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <p class="wait-text">Waiting for another player to join</p>
+
+  <div class="conn-status" [class.online]="connected()">
+    <span class="conn-dot"></span>
+    <span>{{ connected() ? 'Server connected' : 'Server offline - run node server.js' }}</span>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="board-outer" [class.expanding]="isExpanding()">
+
+  <!-- Expanding overlay message -->
+  <div class="expand-overlay" *ngIf="isExpanding()">
+    <span class="expand-icon">⊞</span>
+    EXPANDING GRID TO {{ nextSize() }}×{{ nextSize() }}
+  </div>
+
+  <!-- Grid size badge -->
+  <div class="grid-badge">{{ gridSize() }}×{{ gridSize() }} · 5 in a row to win</div>
+
+  <!-- Scrollable board -->
+  <div class="board-scroll">
+    <div class="board"
+         [style.grid-template-columns]="gridCols()"
+         [style.width.px]="boardPx()"
+         [style.height.px]="boardPx()">
+
+      <div *ngFor="let cell of cells(); trackBy: trackCell"
+           class="cell"
+           appRipple
+           [class.taken]="!!cell.mark"
+           [class.winner]="cell.isWinner"
+           [class.is-new]="cell.isNew"
+           [class.hoverable]="canClick() && !cell.mark"
+           (click)="onClick(cell)">
+
+        <span *ngIf="cell.mark"
+              class="cell-mark"
+              [class.mark-x]="cell.mark === 'X'"
+              [class.mark-o]="cell.mark === 'O'"
+              [style.font-size.px]="cellPx() * 0.55">
+          {{ cell.mark }}
+        </span>
+
+      </div>
+    </div>
+  </div>
+</div>

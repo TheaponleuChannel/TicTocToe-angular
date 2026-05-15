@@ -1,0 +1,49 @@
+<!-- Confetti fires via effect() inside the component -->
+<app-confetti></app-confetti>
+
+<div class="game-wrapper">
+
+  <!-- ── Top bar ───────────────────────────────────────── -->
+  <div class="game-topbar">
+    <button class="btn-back" (click)="goMenu()">‹ MENU</button>
+
+    <app-badge [color]="mode() === 'mp' ? 'o' : 'x'">
+      {{ mode() === 'mp' ? 'ONLINE' : 'VS AI' }}
+    </app-badge>
+
+    <div class="topbar-right">
+      <!-- Sound toggle -->
+      <button class="btn-icon-only" (click)="toggleSound()" title="Sound">
+        {{ soundOn ? '🔊' : '🔇' }}
+      </button>
+      <!-- How to play -->
+      <button class="btn-icon-only" (click)="openGuide()" title="How to play">?</button>
+      <!-- Restart (AI only) -->
+      <button *ngIf="mode() === 'ai'" class="btn-icon-only" (click)="restart()" title="Restart">↺</button>
+    </div>
+  </div>
+
+  <!-- ── Turn indicator ───────────────────────────────── -->
+  <div class="turn-row">
+    <app-turn-indicator></app-turn-indicator>
+
+    <!-- Multiplayer: server connection pill -->
+    <div *ngIf="mode() === 'mp'" class="conn-pill" [class.online]="connected()">
+      <span class="conn-dot"></span>
+      {{ connected() ? 'Online' : 'Disconnected' }}
+    </div>
+  </div>
+
+  <!-- ── Scoreboard ────────────────────────────────────── -->
+  <app-scoreboard></app-scoreboard>
+
+  <!-- ── Board ─────────────────────────────────────────── -->
+  <app-board></app-board>
+
+</div>
+
+<!-- ── Result overlay (portal-like, fixed) ───────────── -->
+<app-result-overlay
+  (playAgain)="onPlayAgain()"
+  (menu)="goMenu()">
+</app-result-overlay>

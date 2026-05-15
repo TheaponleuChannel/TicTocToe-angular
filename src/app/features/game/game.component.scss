@@ -1,0 +1,24 @@
+.game-wrapper {
+  position:relative;z-index:2;display:flex;flex-direction:column;
+  align-items:center;gap:.8rem;padding:.8rem .6rem 1.2rem;
+  width:100%;max-width:640px;
+}
+
+/* Top bar */
+.game-topbar {
+  display:flex;align-items:center;justify-content:space-between;width:100%;gap:.5rem;
+}
+.topbar-right { display:flex;gap:.4rem;align-items:center; }
+
+/* Turn row */
+.turn-row { display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;justify-content:center; }
+
+/* Multiplayer connection pill */
+.conn-pill {
+  display:flex;align-items:center;gap:.4rem;font-family:'Orbitron',sans-serif;
+  font-size:.58rem;letter-spacing:.18em;color:var(--dim);
+  border:1px solid var(--border);border-radius:30px;padding:.32rem .75rem;
+}
+.conn-pill.online { color:var(--text);border-color:rgba(57,255,20,.4); }
+.conn-dot { width:7px;height:7px;border-radius:50%;background:var(--dim); }
+.conn-pill.online .conn-dot { background:#39ff14;box-shadow:0 0 8px #39ff14;animation:pulse 2s infinite; }

@@ -1,0 +1,15 @@
+.menu-content { position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:2rem;padding:1.5rem 1rem;text-align:center; }
+.game-title   { user-select:none; }
+.title-line   { font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(2.2rem,9vw,5rem);letter-spacing:.08em;line-height:1;display:flex;align-items:center;gap:.25em; }
+.tw-x   { color:var(--x-color);text-shadow:var(--glow-x); }
+.tw-dot { color:var(--dim); }
+.tw-o   { color:var(--o-color);text-shadow:var(--glow-o); }
+.title-sub { font-family:'Orbitron',sans-serif;font-size:clamp(.58rem,1.8vw,.8rem);letter-spacing:.3em;color:var(--dim);margin-top:.6rem;min-height:1.4em; }
+.cursor { animation:blink .75s step-end infinite;color:var(--x-color); }
+.win-rule { font-size:.8rem;color:var(--text);letter-spacing:.05em;margin-top:.3rem; }
+.menu-buttons { display:flex;flex-direction:column;gap:.85rem;width:min(340px,90vw); }
+.btn-icon  { font-size:1.1em; }
+.btn-col   { display:flex;flex-direction:column;align-items:flex-start;gap:.1rem; }
+.btn-label { font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.14em; }
+.btn-hint  { font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:400;opacity:.6;letter-spacing:.04em;text-transform:none; }
+.menu-footer { font-size:.74rem;color:var(--dim);letter-spacing:.06em; }

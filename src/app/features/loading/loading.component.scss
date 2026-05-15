@@ -1,0 +1,9 @@
+.loading-wrap { display:flex;flex-direction:column;align-items:center;gap:1.2rem;z-index:2; }
+.loading-logo { font-family:'Orbitron',sans-serif;font-size:clamp(3rem,12vw,5.5rem);font-weight:900;line-height:1; }
+.load-x { color:var(--x-color);text-shadow:var(--glow-x); }
+.load-sep { color:var(--dim);animation:blink 1.2s infinite; }
+.load-o { color:var(--o-color);text-shadow:var(--glow-o); }
+.game-name { font-family:'Orbitron',sans-serif;font-size:clamp(.8rem,2.5vw,1.1rem);letter-spacing:.3em;color:var(--text);font-weight:700; }
+.bar-wrap { width:min(300px,70vw);height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden; }
+.bar { height:100%;background:linear-gradient(90deg,var(--x-color),var(--o-color));border-radius:4px;box-shadow:0 0 12px var(--x-color);transition:width .05s linear; }
+.status-text { font-family:'Orbitron',sans-serif;font-size:.68rem;letter-spacing:.25em;color:var(--dim);animation:pulse 1.4s ease-in-out infinite; }

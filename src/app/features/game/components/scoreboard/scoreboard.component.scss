@@ -1,0 +1,9 @@
+.scoreboard { display:flex;align-items:center;background:rgba(255,255,255,.025);
+  border:1px solid var(--border);border-radius:12px;overflow:hidden;width:100%;max-width:460px; }
+.score-item { flex:1;display:flex;flex-direction:column;align-items:center;padding:.8rem .4rem;gap:.2rem; }
+.score-mid  { flex:0 0 90px;display:flex;flex-direction:column;align-items:center;
+  padding:.8rem .4rem;gap:.2rem;border-left:1px solid var(--border);border-right:1px solid var(--border); }
+.score-name { font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:.14em;font-weight:700;
+  max-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.draw-label { font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:.18em;color:var(--dim); }
+.score-val  { font-family:'Orbitron',sans-serif;font-size:1.55rem;font-weight:900;line-height:1; }

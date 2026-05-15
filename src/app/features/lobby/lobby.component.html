@@ -1,0 +1,27 @@
+<div class="panel">
+  <button class="btn-back" (click)="back()">‹ BACK</button>
+  <h2 class="panel-title">MULTIPLAYER LOBBY</h2>
+  <p class="panel-sub">Welcome, <span class="hl">{{ nickname() }}</span></p>
+
+  <div class="lobby-options">
+    <div class="lobby-card">
+      <div class="card-icon">⊞</div>
+      <h3>Create Room</h3>
+      <p>Generate a room code and invite a friend</p>
+      <app-button variant="primary" [loading]="creating" (clicked)="create()">
+        {{ creating ? 'Creating' : 'Create Room' }}
+      </app-button>
+    </div>
+
+    <div class="lobby-or">OR</div>
+
+    <div class="lobby-card">
+      <div class="card-icon">⊟</div>
+      <h3>Join Room</h3>
+      <p>Enter your friend's room code below</p>
+      <input class="neon-input code-input" [(ngModel)]="code" placeholder="ROOM CODE"
+             maxlength="6" (input)="code=code.toUpperCase()" (keydown.enter)="join()" />
+      <app-button variant="secondary" (clicked)="join()">Join Room</app-button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+.turn-bar { display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.03);
+  border:1px solid var(--border);border-radius:40px;padding:.5rem 1.3rem;
+  transition:border-color .3s;width:fit-content; }
+.turn-bar.x-turn { border-color:rgba(0,220,255,.45); }
+.turn-bar.o-turn { border-color:rgba(255,77,166,.45); }
+.turn-mark  { font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:900; }
+.turn-label { font-family:'Orbitron',sans-serif;font-size:.67rem;letter-spacing:.14em;color:var(--text); }
+.my-mark-badge { font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:.12em;
+  color:var(--dim);padding-left:.7rem;border-left:1px solid var(--border); }

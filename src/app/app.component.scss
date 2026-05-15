@@ -1,0 +1,37 @@
+/* ── App shell ─────────────────────────────────────────── */
+.app-shell {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* Starfield */
+.bg-stars {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(0,220,255,.6)  0%, transparent 100%),
+    radial-gradient(1px 1px at 72%  8%, rgba(255,77,166,.5)  0%, transparent 100%),
+    radial-gradient(1px 1px at 33% 88%, rgba(0,220,255,.4)   0%, transparent 100%),
+    radial-gradient(2px 2px at 55% 48%, rgba(255,255,255,.14) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 55%, rgba(255,77,166,.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at  8% 65%, rgba(0,220,255,.3)   0%, transparent 100%),
+    radial-gradient(1px 1px at 42% 30%, rgba(255,209,102,.25) 0%, transparent 100%),
+    radial-gradient(2px 2px at 80% 80%, rgba(255,255,255,.1)  0%, transparent 100%);
+}
+
+/* CRT scanline texture */
+.scanlines {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 3px,
+    rgba(0,0,0,.055) 3px, rgba(0,0,0,.055) 4px
+  );
+}
+
+/* Screen host: fills shell, stacks above decoration */
+.screen-host {
+  position: absolute; inset: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}

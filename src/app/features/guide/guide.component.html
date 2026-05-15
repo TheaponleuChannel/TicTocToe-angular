@@ -1,0 +1,121 @@
+<div class="guide-wrap">
+  <div class="guide-panel">
+
+    <button class="btn-back" (click)="back()">‹ BACK</button>
+    <h2 class="guide-title">HOW TO PLAY</h2>
+    <p class="guide-sub">NEON GOMOKU — Connect 5</p>
+
+    <div class="guide-sections">
+
+      <section class="guide-section">
+        <h3>🎯 Objective</h3>
+        <p>
+          Be the first player to place <strong>5 marks in a row</strong> — horizontally,
+          vertically, or diagonally — on the grid before your opponent does.
+        </p>
+      </section>
+
+      <section class="guide-section">
+        <h3>📋 Basic Rules</h3>
+        <ul>
+          <li>Player <span class="x-color">X</span> always goes first</li>
+          <li>Players alternate placing their mark on any empty cell</li>
+          <li>First to get exactly <strong>5 in a row</strong> wins</li>
+          <li>If the board fills with no winner — the grid <strong>expands automatically!</strong></li>
+          <li>You cannot place on an occupied cell</li>
+        </ul>
+      </section>
+
+      <section class="guide-section">
+        <h3>⊞ Dynamic Grid Expansion</h3>
+        <p>
+          The game starts on a <strong>12×12</strong> grid. If all 144 cells are filled
+          with no 5-in-a-row winner, the grid <strong>doubles in size</strong> (12→24→48→96…).
+          All existing pieces are repositioned to the center of the new, larger grid — play continues!
+        </p>
+        <div class="expand-demo">
+          <span class="ex-grid">12×12</span>
+          <span class="arrow">→</span>
+          <span class="ex-grid">24×24</span>
+          <span class="arrow">→</span>
+          <span class="ex-grid">48×48</span>
+          <span class="arrow">→</span>
+          <span class="ex-grid dim">∞</span>
+        </div>
+      </section>
+
+      <section class="guide-section">
+        <h3>🤖 VS AI Mode</h3>
+        <ul>
+          <li>You play as <span class="x-color">X</span>, the AI plays as <span class="o-color">O</span></li>
+          <li>AI uses threat scoring — it tries to win and will block your threats</li>
+          <li>AI prefers center positions and builds multi-directional threats</li>
+          <li>Scores persist across rounds — use the ↺ button to restart with reset scores</li>
+        </ul>
+      </section>
+
+      <section class="guide-section">
+        <h3>🌐 Online Multiplayer</h3>
+        <ul>
+          <li>Start the backend: <code>node server.js</code></li>
+          <li><strong>Create Room</strong> → get a 6-character code → share it</li>
+          <li><strong>Join Room</strong> → enter your friend's code on any device</li>
+          <li>Host is always <span class="x-color">X</span>, guest is always <span class="o-color">O</span></li>
+          <li>Grid expansion is synced in real-time across both devices</li>
+          <li>After each round, both players must request a rematch to reset</li>
+        </ul>
+      </section>
+
+      <section class="guide-section">
+        <h3>🔊 Sound &amp; Controls</h3>
+        <ul>
+          <li><strong>🔊 / 🔇</strong> — Toggle sound effects on/off</li>
+          <li><strong>↺</strong> — Restart the current game (AI mode only)</li>
+          <li><strong>‹ MENU</strong> — Return to main menu (leaves multiplayer room)</li>
+          <li><strong>?</strong> — Open this guide from anywhere in the game</li>
+        </ul>
+      </section>
+
+      <section class="guide-section strategy">
+        <h3>💡 Strategy Tips</h3>
+        <ul>
+          <li><strong>Control the center</strong> — more directions to build sequences from</li>
+          <li><strong>Create dual threats</strong> — force opponent to block one while you complete another</li>
+          <li><strong>Watch all diagonals</strong> — easy to miss, especially on large grids</li>
+          <li><strong>Block 4-in-a-row immediately</strong> — never let opponent get to 4 open ends</li>
+          <li><strong>Think ahead on expansion</strong> — plan where pieces will land after grid grows</li>
+        </ul>
+      </section>
+
+      <section class="guide-section winning-example">
+        <h3>✅ Winning Patterns</h3>
+        <div class="patterns">
+          <div class="pattern">
+            <div class="pattern-row">
+              <span class="x-color fw">X</span><span class="x-color fw">X</span>
+              <span class="x-color fw">X</span><span class="x-color fw">X</span>
+              <span class="x-color fw">X</span>
+            </div>
+            <p class="pattern-label">Horizontal (5 in a row)</p>
+          </div>
+          <div class="pattern">
+            <div class="pattern-diag">
+              <div>X · · · ·</div>
+              <div>· X · · ·</div>
+              <div>· · X · ·</div>
+              <div>· · · X ·</div>
+              <div>· · · · X</div>
+            </div>
+            <p class="pattern-label">Diagonal (top-left to bottom-right)</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <app-button variant="primary" style="align-self:center;margin-top:.5rem" (clicked)="back()">
+      GOT IT — LET'S PLAY
+    </app-button>
+
+  </div>
+</div>

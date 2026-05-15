@@ -1,0 +1,43 @@
+<div class="menu-content">
+  <header class="game-title">
+    <div class="title-line">
+      <span class="tw-x">NEON</span>
+      <span class="tw-dot">·</span>
+      <span class="tw-o">GOMOKU</span>
+    </div>
+    <p class="title-sub">{{ typeText }}<span class="cursor">|</span></p>
+    <p class="win-rule">Connect <span class="hl">5 in a row</span> to win · Grid expands when full</p>
+  </header>
+
+  <nav class="menu-buttons" role="navigation">
+    <app-button variant="primary" (clicked)="startAI()">
+      <span class="btn-icon">🤖</span>
+      <span class="btn-col">
+        <span class="btn-label">Play vs AI</span>
+        <span class="btn-hint">Challenge the machine</span>
+      </span>
+    </app-button>
+
+    <app-button variant="secondary" (clicked)="goFriend()">
+      <span class="btn-icon">🎮</span>
+      <span class="btn-col">
+        <span class="btn-label">Play with Friend</span>
+        <span class="btn-hint">Cross-device online room</span>
+      </span>
+    </app-button>
+
+    <app-button variant="ghost" (clicked)="openGuide()">
+      <span class="btn-icon">📖</span>
+      <span class="btn-col">
+        <span class="btn-label">How to Play</span>
+        <span class="btn-hint">Rules & strategy guide</span>
+      </span>
+    </app-button>
+  </nav>
+
+  <footer class="menu-footer">
+    <span class="x-color">●</span>&nbsp;
+    12×12 grid · expands when full · 5 in a row wins
+    &nbsp;<span class="o-color">●</span>
+  </footer>
+</div>
