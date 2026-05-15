@@ -90,6 +90,13 @@ const httpServer = http.createServer((req, res) => {
 
 /* ── Socket.IO ─────────────────────────────────────────── */
 const io = new Server(httpServer, { cors:{origin:'*',methods:['GET','POST']} });
+const io = new Server(httpServer, { 
+  cors: {
+    // Replace with your actual Vercel URL once deployed
+    origin: ["https://tictoctoe-angular.onrender.com/", "http://localhost:4200"],
+    methods: ["GET", "POST"]
+  } 
+});
 
 io.on('connection', socket => {
   console.log(`[+] ${socket.id}`);
