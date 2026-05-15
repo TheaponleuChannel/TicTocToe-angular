@@ -11,6 +11,11 @@ const { Server } = require('socket.io');
 const PORT       = process.env.PORT || 3000;
 const WIN_LENGTH = 5;
 const GRID_START = 12;
+const CLIENT_ORIGINS = (process.env.CLIENT_ORIGIN ||
+  'https://tictoctoe-angular.vercel.app,http://localhost:4200')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
 
 /* ── Room store ────────────────────────────────────────── */
 const rooms = new Map();
@@ -69,6 +74,11 @@ const MIME = {'.html':'text/html','.css':'text/css','.js':'text/javascript',
 
 const httpServer = http.createServer((req, res) => {
   let urlPath = req.url.split('?')[0];
+  if (urlPath === '/health') {
+    res.writeHead(200, {'Content-Type':'application/json'});
+    res.end(JSON.stringify({ok:true}));
+    return;
+  }
   if (urlPath === '/') urlPath = '/index.html';
   const filePath = path.join(DIST, urlPath);
   if (!filePath.startsWith(DIST)) { res.writeHead(403); res.end(); return; }
@@ -89,11 +99,9 @@ const httpServer = http.createServer((req, res) => {
 });
 
 /* ── Socket.IO ─────────────────────────────────────────── */
-const io = new Server(httpServer, { cors:{origin:'*',methods:['GET','POST']} });
 const io = new Server(httpServer, { 
   cors: {
-    // Replace with your actual Vercel URL once deployed
-    origin: ["https://tictoctoe-angular.onrender.com/", "http://localhost:4200"],
+    origin: CLIENT_ORIGINS,
     methods: ["GET", "POST"]
   } 
 });

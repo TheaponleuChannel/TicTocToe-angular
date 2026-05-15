@@ -4,10 +4,12 @@ import { GameService } from './game.service';
 import { ToastService } from './toast.service';
 import { SoundService } from './sound.service';
 import { MoveResult, ServerRoom } from '../models/game.models';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class SocketService {
   private socket: any = null;
+  private socketClientLoading: Promise<void> | null = null;
 
   constructor(
     private game:  GameService,
@@ -17,15 +19,39 @@ export class SocketService {
   ) {}
 
   connect(): void {
-    if (typeof (window as any)['io'] === 'undefined') return;
+    if (typeof (window as any)['io'] === 'undefined') {
+      this.loadSocketClient()
+        .then(() => this.connect())
+        .catch(() => this.game.store.patch({ connected: false }));
+      return;
+    }
     if (this.socket?.connected) return;
     try {
-      this.socket = (window as any)['io']({ transports: ['websocket', 'polling'], reconnectionAttempts: 5 });
+      this.socket = (window as any)['io'](environment.socketUrl, {
+        transports: ['websocket', 'polling'],
+        reconnectionAttempts: 5,
+      });
       this.socket.on('connect',       () => this.game.store.patch({ connected: true }));
       this.socket.on('disconnect',    () => this.game.store.patch({ connected: false }));
       this.socket.on('connect_error', () => this.game.store.patch({ connected: false }));
       this._registerHandlers();
     } catch (e) { console.warn('[Socket]', e); }
+  }
+
+  private loadSocketClient(): Promise<void> {
+    if (this.socketClientLoading) return this.socketClientLoading;
+    this.socketClientLoading = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = `${environment.socketUrl}/socket.io/socket.io.js`;
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => {
+        (window as any)._noServer = true;
+        reject(new Error('Socket.IO client failed to load'));
+      };
+      document.head.appendChild(script);
+    });
+    return this.socketClientLoading;
   }
 
   isAvailable(): boolean { return !!this.socket?.connected; }
