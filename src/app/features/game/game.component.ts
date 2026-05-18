@@ -2,6 +2,7 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { signal } from '@angular/core';
 import { GameStore }   from '../../store/game.store';
 import { QuickPlayKind } from '../../models/game.models';
 import { GameService } from '../../services/game.service';
@@ -47,6 +48,7 @@ export class GameComponent {
   soundOn            = this.sound.enabled;
   activeQuickPanel: QuickPlayKind | null = null;
   customMessage = '';
+  myLastMessage = signal<string | null>(null);
 
   readonly stickers = ['😀','😂','😎','😮','😢','😡','👏','🔥','💯','🏆'];
   readonly quickMessages = [
@@ -76,26 +78,34 @@ export class GameComponent {
     this.activeQuickPanel = this.activeQuickPanel === panel ? null : panel;
   }
 
+  private showMyMessage(content: string): void {
+    this.myLastMessage.set(content);
+    setTimeout(() => this.myLastMessage.set(null), 3000);
+  }
+
   sendSticker(sticker: string): void {
-    this.sendQuickPlay('sticker', sticker);
+    const s = this.store.state();
+    if (s.mode !== 'mp' || !s.room.code || !this.socket.isAvailable()) return;
+    this.socket.sendQuickPlay(s.room.code, 'sticker', sticker);
+    this.showMyMessage(sticker);
+    this.activeQuickPanel = 'message';
   }
 
   sendPresetMessage(message: string): void {
-    this.sendQuickPlay('message', message);
+    const s = this.store.state();
+    if (s.mode !== 'mp' || !s.room.code || !this.socket.isAvailable()) return;
+    this.socket.sendQuickPlay(s.room.code, 'message', message);
+    this.showMyMessage(message);
   }
 
   sendCustomMessage(): void {
     const message = this.customMessage.trim();
     if (!message) return;
-    this.sendQuickPlay('message', message);
-    this.customMessage = '';
-  }
-
-  private sendQuickPlay(kind: QuickPlayKind, content: string): void {
     const s = this.store.state();
     if (s.mode !== 'mp' || !s.room.code || !this.socket.isAvailable()) return;
-    this.socket.sendQuickPlay(s.room.code, kind, content);
-    this.activeQuickPanel = null;
+    this.socket.sendQuickPlay(s.room.code, 'message', message);
+    this.showMyMessage(message);
+    this.customMessage = '';
   }
 
   goMenu(): void {

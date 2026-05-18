@@ -71,19 +71,69 @@ app-board { width:100%;display:flex;justify-content:center;flex:1 1 auto;min-hei
 .custom-message button {
   padding:0 .55rem;font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:.08em;
 }
+
+.my-message-bubble {
+  position: absolute;
+  left: 25%;
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+  max-width: min(190px, 42vw);
+  padding: 0.42rem 0.58rem;
+  border-radius: 8px;
+  background: rgba(7, 11, 20, 0.96);
+  border: 1px solid rgba(0, 220, 255, 0.45);
+  color: var(--white);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  overflow-wrap: anywhere;
+  box-shadow: var(--glow-x);
+  animation: chat-pop 0.36s ease both;
+  pointer-events: none;
+  z-index: 10;
+  width: max-content;
+}
+
+.my-message-bubble::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -5px;
+  transform: translateX(-50%) rotate(45deg);
+  width: 9px;
+  height: 9px;
+  background: rgba(7, 11, 20, 0.96);
+  border-left: 1px solid rgba(0, 220, 255, 0.45);
+  border-top: 1px solid rgba(0, 220, 255, 0.45);
+}
+
+@keyframes chat-pop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -4px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
 @media (max-width: 520px), (max-height: 680px) {
   .game-wrapper { gap:.42rem;padding-right:.45rem; }
   .game-topbar { gap:.35rem; }
   .topbar-right { gap:.25rem; }
   .conn-pill { font-size:.52rem;padding:.26rem .55rem;letter-spacing:.12em; }
-  // .quick-rail {
-  //   left:0;top:calc(.45rem + env(safe-area-inset-top));bottom:auto;
-  //   transform:none;flex-direction:column;
-  // }
   .quick-button { width:40px;height:34px;border-radius:8px; }
   .quick-popover {
-    left:0;top:calc(68px + .45rem + 10px);bottom:auto;transform:none;
+    left:0;top:calc(25px + .45rem + 10px);bottom:auto;transform:none;
     width:min(300px,calc(100vw - 20px));max-height:52dvh;
   }
   .message-popover { width:min(320px,calc(100vw - 20px)); }
+  .my-message-bubble {
+    max-width: min(150px, 44vw);
+    font-size: 0.72rem;
+    padding: 0.34rem 0.46rem;
+  }
 }
