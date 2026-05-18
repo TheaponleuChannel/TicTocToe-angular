@@ -147,7 +147,7 @@ io.on('connection', socket => {
       room.status='done';
       if (result.winner==='draw') room.scores.draw++;
       else room.scores[result.winner]++;
-      io.to(code).emit('game:move',{board:room.board,turn:room.turn,result,scores:room.scores});
+      io.to(code).emit('game:move',{board:room.board,turn:room.turn,result,scores:room.scores,index});
       console.log(`[Room ${code}] winner:${result.winner}`);
     } else {
       // Check board full → expand grid
@@ -164,9 +164,23 @@ io.on('connection', socket => {
         console.log(`[Room ${code}] grid expanded to ${newSize}x${newSize}`);
       } else {
         room.turn=room.turn==='X'?'O':'X';
-        io.to(code).emit('game:move',{board:room.board,turn:room.turn,result:null,scores:room.scores});
+        io.to(code).emit('game:move',{board:room.board,turn:room.turn,result:null,scores:room.scores,index});
       }
     }
+  });
+
+  socket.on('quick:play', ({code,kind,content}) => {
+    const room=rooms.get(code); if(!room) return;
+    const player=room.players.find(p=>p.id===socket.id); if(!player) return;
+    const clean = String(content || '').trim().slice(0,80);
+    if (!clean || !['sticker','message'].includes(kind)) return;
+    socket.to(code).emit('quick:play',{
+      id: Date.now(),
+      kind,
+      content: clean,
+      from: player.nickname,
+      mark: player.mark
+    });
   });
 
   socket.on('game:rematch', ({code}) => {

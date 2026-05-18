@@ -1,7 +1,9 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GameStore }   from '../../store/game.store';
+import { QuickPlayKind } from '../../models/game.models';
 import { GameService } from '../../services/game.service';
 import { SocketService } from '../../services/socket.service';
 import { SoundService }  from '../../services/sound.service';
@@ -18,6 +20,7 @@ import { ButtonComponent }        from '../../shared/components/button/button.co
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     BoardComponent,
     ScoreboardComponent,
     TurnIndicatorComponent,
@@ -42,6 +45,22 @@ export class GameComponent {
   readonly mode      = this.store.mode;
   readonly connected = this.store.connected;
   soundOn            = this.sound.enabled;
+  activeQuickPanel: QuickPlayKind | null = null;
+  customMessage = '';
+
+  readonly stickers = ['😀','😂','😎','😮','😢','😡','👏','🔥','💯','🏆'];
+  readonly quickMessages = [
+    'Well played!',
+    'Why you think too long!',
+    "I can't wait anymore!",
+    'Haha you so noob.',
+    'Train more before invite me',
+    'Nice move!',
+    'That was risky.',
+    'Your turn, champion.',
+    'I saw that coming.',
+    'Rematch after this?'
+  ];
 
   toggleSound(): void { this.sound.toggle(); this.soundOn = this.sound.enabled; }
 
@@ -51,6 +70,32 @@ export class GameComponent {
     if (this.store.mode() === 'ai') {
       this.game.resetBoard();
     }
+  }
+
+  toggleQuickPanel(panel: QuickPlayKind): void {
+    this.activeQuickPanel = this.activeQuickPanel === panel ? null : panel;
+  }
+
+  sendSticker(sticker: string): void {
+    this.sendQuickPlay('sticker', sticker);
+  }
+
+  sendPresetMessage(message: string): void {
+    this.sendQuickPlay('message', message);
+  }
+
+  sendCustomMessage(): void {
+    const message = this.customMessage.trim();
+    if (!message) return;
+    this.sendQuickPlay('message', message);
+    this.customMessage = '';
+  }
+
+  private sendQuickPlay(kind: QuickPlayKind, content: string): void {
+    const s = this.store.state();
+    if (s.mode !== 'mp' || !s.room.code || !this.socket.isAvailable()) return;
+    this.socket.sendQuickPlay(s.room.code, kind, content);
+    this.activeQuickPanel = null;
   }
 
   goMenu(): void {

@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { GameService } from './game.service';
 import { ToastService } from './toast.service';
 import { SoundService } from './sound.service';
-import { MoveResult, ServerRoom } from '../models/game.models';
+import { MoveResult, QuickPlayEvent, ServerRoom } from '../models/game.models';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -11,6 +11,7 @@ export class SocketService {
   private socket: any = null;
   private socketClientLoading: Promise<void> | null = null;
   private connecting: Promise<void> | null = null;
+  readonly quickPlayEvent = signal<QuickPlayEvent | null>(null);
 
   constructor(
     private game:  GameService,
@@ -103,8 +104,8 @@ export class SocketService {
       this.toast.show('⚡ Game on!', 'success');
     });
 
-    s.on('game:move', (d: { board: Mark[]; turn: 'X'|'O'; result: MoveResult|null; scores?: any }) => {
-      this.game.applyServerMove(d.board, d.turn, d.result, d.scores);
+    s.on('game:move', (d: { board: Mark[]; turn: 'X'|'O'; result: MoveResult|null; scores?: any; index?: number }) => {
+      this.game.applyServerMove(d.board, d.turn, d.result, d.scores, d.index);
       if (d.result?.winner === 'draw') this.sound.playDraw();
       else if (d.result?.winner)       this.sound.playWin();
     });
@@ -128,6 +129,7 @@ export class SocketService {
       this.game.store.patch({ gameActive: false });
     });
     s.on('room:error', (d: any) => { this.toast.show('⚠ ' + d.message, 'error'); this.sound.playError(); });
+    s.on('quick:play', (d: QuickPlayEvent) => this.quickPlayEvent.set(d));
   }
 
   async createRoom(nickname: string): Promise<void> {
@@ -147,6 +149,9 @@ export class SocketService {
     }
   }
   sendMove(code: string, index: number): void { this.socket?.emit('game:move', { code, index }); }
+  sendQuickPlay(code: string, kind: 'sticker' | 'message', content: string): void {
+    this.socket?.emit('quick:play', { code, kind, content });
+  }
   requestRematch(code: string): void           { this.socket?.emit('game:rematch', { code }); }
   leaveRoom(code: string): void                { this.socket?.emit('room:leave', { code }); }
 }

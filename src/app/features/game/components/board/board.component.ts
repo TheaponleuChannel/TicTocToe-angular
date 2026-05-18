@@ -30,6 +30,7 @@ export class BoardComponent {
   readonly cells       = this.store.cells;
   readonly gridSize    = this.store.gridSize;
   readonly isExpanding = this.store.expanding;
+  readonly lastMoveIndex = this.store.lastMoveIndex;
   private readonly viewport = signal(this.getViewport());
 
   readonly nextSize = computed(() => this.store.gridSize() * 2);

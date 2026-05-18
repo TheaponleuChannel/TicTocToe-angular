@@ -78,7 +78,7 @@ export class GameService {
 
     // Board full → expand grid
     if (board.every(m => m !== null)) {
-      this.store.patch({ cells: newCells });
+      this.store.patch({ cells: newCells, lastMoveIndex: index });
       setTimeout(() => this._expandGrid(), 500);
       return { winner: null, combo: null };
     }
@@ -86,13 +86,17 @@ export class GameService {
     this.store.patch({
       cells:       newCells,
       currentTurn: s.currentTurn === 'X' ? 'O' : 'X',
+      lastMoveIndex: index,
     });
     return null;
   }
 
   /* ── Apply a server-validated board state ───────────────── */
-  applyServerMove(board: Mark[], turn: 'X'|'O', result: MoveResult | null, scores?: any): void {
+  applyServerMove(board: Mark[], turn: 'X'|'O', result: MoveResult | null, scores?: any, lastIndex?: number): void {
     const s = this.store.state();
+    const changedIndex = typeof lastIndex === 'number'
+      ? lastIndex
+      : board.findIndex((mark, i) => mark !== null && mark !== s.cells[i]?.mark);
     const newCells = s.cells.map((cell, i) => ({
       ...cell,
       mark:  board[i] ?? cell.mark,
@@ -103,7 +107,11 @@ export class GameService {
       this._applyResult(newCells, result);
       if (scores) this.syncServerScores(scores);
     } else {
-      this.store.patch({ cells: newCells, currentTurn: turn });
+      this.store.patch({
+        cells: newCells,
+        currentTurn: turn,
+        lastMoveIndex: changedIndex >= 0 ? changedIndex : s.lastMoveIndex,
+      });
     }
   }
 
@@ -125,7 +133,7 @@ export class GameService {
           newCells[ni] = { ...cell, isNew: false };
         }
       });
-      this.store.patch({ gridSize: newSize, cells: newCells, expanding: false, gameActive: true });
+      this.store.patch({ gridSize: newSize, cells: newCells, expanding: false, gameActive: true, lastMoveIndex: null });
     }, 700);
   }
 
@@ -135,7 +143,7 @@ export class GameService {
     setTimeout(() => {
       const cells = this.store.buildCells(gridSize);
       board.forEach((m, i) => { if (m) cells[i] = { ...cells[i], mark: m }; });
-      this.store.patch({ gridSize, cells, currentTurn: turn, expanding: false, gameActive: true });
+      this.store.patch({ gridSize, cells, currentTurn: turn, expanding: false, gameActive: true, lastMoveIndex: null });
     }, 700);
   }
 
@@ -157,6 +165,7 @@ export class GameService {
       winner:     result.winner,
       winCombo:   result.combo ?? [],
       scores:     sc,
+      lastMoveIndex: newCells.findIndex(c => c.isNew),
     });
   }
 
@@ -178,6 +187,7 @@ export class GameService {
       expanding:   false,
       scores:      { p1: 0, draw: 0, p2: 0 },
       screen:      'game',
+      lastMoveIndex: null,
     });
     this.router.navigate(['/game']);
   }
@@ -193,6 +203,7 @@ export class GameService {
       winner:      null,
       winCombo:    [],
       expanding:   false,
+      lastMoveIndex: null,
     });
   }
 
@@ -200,7 +211,7 @@ export class GameService {
     const size  = room.gridSize || GRID_START;
     const cells = this.store.buildCells(size);
     room.board.forEach((m, i) => { if (m) cells[i] = { ...cells[i], mark: m }; });
-    this.store.patch({ gridSize: size, cells, currentTurn: room.turn, gameActive: room.status === 'playing' });
+    this.store.patch({ gridSize: size, cells, currentTurn: room.turn, gameActive: room.status === 'playing', lastMoveIndex: null });
   }
 
   /* ── Persistence ────────────────────────────────────────── */

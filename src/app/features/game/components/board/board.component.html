@@ -23,6 +23,7 @@
            [class.taken]="!!cell.mark"
            [class.winner]="cell.isWinner"
            [class.is-new]="cell.isNew"
+           [class.last-move]="cell.index === lastMoveIndex()"
            [class.hoverable]="canClick() && !cell.mark"
            (click)="onClick(cell)">
 

@@ -37,6 +37,50 @@
   <!-- ── Scoreboard ────────────────────────────────────── -->
   <app-scoreboard></app-scoreboard>
 
+  <!-- ── Chat ──────────────────────────────────────────── -->
+  <aside class="quick-rail" *ngIf="mode() === 'mp'">
+    <button class="quick-button" type="button" (click)="toggleQuickPanel('sticker')" title="Send sticker">
+      <span class="sticker-icon">
+        ☺
+      </span>
+    </button>
+    <button class="quick-button" type="button" (click)="toggleQuickPanel('message')" title="Send message">
+      <span class="sticker-icon">
+        💬
+      </span>
+    </button>
+
+    <div class="quick-popover" *ngIf="activeQuickPanel === 'sticker'">
+      <button
+        *ngFor="let sticker of stickers"
+        class="sticker-option"
+        type="button"
+        (click)="sendSticker(sticker)">
+        {{ sticker }}
+      </button>
+    </div>
+
+    <div class="quick-popover message-popover" *ngIf="activeQuickPanel === 'message'">
+      <button
+        *ngFor="let message of quickMessages"
+        class="message-option"
+        type="button"
+        (click)="sendPresetMessage(message)">
+        {{ message }}
+      </button>
+
+      <form class="custom-message" (ngSubmit)="sendCustomMessage()">
+        <input
+          name="customMessage"
+          [(ngModel)]="customMessage"
+          maxlength="80"
+          placeholder="Type message"
+          autocomplete="off" />
+        <button type="submit">SEND</button>
+      </form>
+    </div>
+  </aside>
+
   <!-- ── Board ─────────────────────────────────────────── -->
   <app-board></app-board>
 

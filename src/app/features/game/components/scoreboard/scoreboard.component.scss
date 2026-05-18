@@ -1,16 +1,36 @@
 .scoreboard { display:flex;align-items:center;background:rgba(255,255,255,.025);
-  border:1px solid var(--border);border-radius:12px;overflow:hidden;width:100%;max-width:460px;min-width:0; }
+  border:1px solid var(--border);border-radius:12px;overflow:visible;width:100%;max-width:460px;min-width:0; }
 .score-item { flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;padding:.65rem .35rem;gap:.16rem; }
 .score-mid  { flex:0 0 clamp(68px,22vw,90px);display:flex;flex-direction:column;align-items:center;
   padding:.65rem .35rem;gap:.16rem;border-left:1px solid var(--border);border-right:1px solid var(--border); }
 .score-name { font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:.14em;font-weight:700;
   max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.name-row { position:relative;max-width:100%;display:flex;align-items:center;justify-content:center;min-width:0; }
+.chat-bubble {
+  position:absolute;left:50%;top:calc(100% + 6px);transform:translateX(-50%);
+  max-width:min(190px,42vw);padding:.42rem .58rem;border-radius:8px;
+  background:rgba(7,11,20,.96);border:1px solid rgba(0,220,255,.45);
+  color:var(--white);font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:700;
+  line-height:1.1;text-align:center;overflow-wrap:anywhere;box-shadow:var(--glow-x);
+  animation:chat-pop .36s ease both;z-index:5;
+  width: max-content;
+}
+.chat-bubble::after {
+  content:'';position:absolute;left:50%;top:-5px;transform:translateX(-50%) rotate(45deg);
+  width:9px;height:9px;background:rgba(7,11,20,.96);border-left:1px solid rgba(0,220,255,.45);
+  border-top:1px solid rgba(0,220,255,.45);
+}
+.o-bubble { border-color:rgba(255,77,166,.45);box-shadow:var(--glow-o); }
+.o-bubble::after { border-left-color:rgba(255,77,166,.45);border-top-color:rgba(255,77,166,.45); }
 .draw-label { font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:.18em;color:var(--dim); }
 .score-val  { font-family:'Orbitron',sans-serif;font-size:1.55rem;font-weight:900;line-height:1; }
+
+@keyframes chat-pop { from { opacity:0;transform:translate(-50%,-4px) scale(.96); } to { opacity:1;transform:translate(-50%,0) scale(1); } }
 
 @media (max-width: 420px), (max-height: 640px) {
   .scoreboard { border-radius:9px; }
   .score-item,.score-mid { padding:.42rem .25rem; }
   .score-name,.draw-label { font-size:.48rem;letter-spacing:.1em; }
   .score-val { font-size:1.18rem; }
+  .chat-bubble { max-width:min(150px,44vw);font-size:.72rem;padding:.34rem .46rem; }
 }

@@ -38,6 +38,7 @@ export class GameStore {
   readonly expanding   = computed(() => this._state().expanding);
   readonly connected   = computed(() => this._state().connected);
   readonly nickname    = computed(() => this._state().nickname);
+  readonly lastMoveIndex = computed(() => this._state().lastMoveIndex);
 
   /* ── Derived computed ──────────────────────────────────── */
   readonly isMyTurn = computed(() => {
@@ -84,6 +85,7 @@ export class GameStore {
       connected:   false,
       room:        { code: null, role: null },
       expanding:   false,
+      lastMoveIndex: null,
     };
   }
 

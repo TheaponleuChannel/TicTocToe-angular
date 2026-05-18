@@ -15,6 +15,16 @@ export interface Cell {
   isNew:     boolean;
 }
 
+export type QuickPlayKind = 'sticker' | 'message';
+
+export interface QuickPlayEvent {
+  id:      number;
+  kind:    QuickPlayKind;
+  content: string;
+  from:    string;
+  mark:    'X' | 'O';
+}
+
 export interface GameState {
   screen:      Screen;
   mode:        GameMode;
@@ -32,6 +42,7 @@ export interface GameState {
   connected:   boolean;
   room:        RoomInfo;
   expanding:   boolean;
+  lastMoveIndex: number | null;
 }
 
 export interface ScoreBoard {

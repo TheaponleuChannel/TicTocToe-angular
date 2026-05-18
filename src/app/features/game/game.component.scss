@@ -1,7 +1,7 @@
 .game-wrapper {
   position:relative;z-index:2;display:flex;flex-direction:column;
   align-items:center;gap:clamp(.45rem,1.6dvh,.8rem);
-  padding:calc(.55rem + env(safe-area-inset-top)) .6rem calc(.7rem + env(safe-area-inset-bottom));
+  padding:calc(.55rem + env(safe-area-inset-top)) .6rem calc(.7rem + env(safe-area-inset-bottom)) 0;
   width:100%;max-width:720px;height:100dvh;min-height:0;overflow:hidden;
 }
 
@@ -31,9 +31,59 @@
 app-scoreboard { width:100%;display:flex;justify-content:center;flex:0 0 auto; }
 app-board { width:100%;display:flex;justify-content:center;flex:1 1 auto;min-height:0; }
 
+.quick-rail {
+  position: relative;
+  display:flex;gap:.45rem;align-items:flex-start;
+  .sticker-icon { font-size:36px;margin-top:-6px; }
+}
+.quick-button {
+  width:46px;height:46px;border-radius:10px;border:1px solid var(--border);
+  background:rgba(255,255,255,.045);color:var(--text);font-family:'Orbitron',sans-serif;
+  font-size:.62rem;font-weight:700;letter-spacing:.08em;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+.quick-button:hover { color:var(--x-color);border-color:var(--x-color);box-shadow:var(--glow-btn); }
+.quick-popover {
+  position:absolute;left:56px;top:0;width:max-content !important;max-height:min(420px,70dvh);overflow:auto;z-index: 99;
+  display:grid;grid-template-columns:repeat(5,1fr);gap:.35rem;
+  padding:.65rem;border:1px solid var(--border);border-radius:10px;
+  background:rgba(7,11,20,.96);box-shadow:0 18px 48px rgba(0,0,0,.45);
+}
+.message-popover { grid-template-columns:1fr;width:260px; }
+.sticker-option,.message-option,.custom-message button {
+  border:1px solid rgba(0,220,255,.14);border-radius:8px;background:rgba(255,255,255,.04);
+  color:var(--text);cursor:pointer;transition:border-color .18s,background .18s;
+}
+.sticker-option { height:34px;font-size:1.15rem; }
+.message-option {
+  min-height:34px;padding:.45rem .55rem;text-align:left;
+  font-family:'Rajdhani',sans-serif;font-size:.86rem;font-weight:600;
+}
+.sticker-option:hover,.message-option:hover,.custom-message button:hover {
+  border-color:var(--x-color);background:rgba(0,220,255,.08);
+}
+.custom-message { display:flex;gap:.4rem;margin-top:.25rem; }
+.custom-message input {
+  flex:1;min-width:0;border:1px solid var(--border);border-radius:8px;
+  background:rgba(0,220,255,.04);color:var(--white);padding:.48rem .55rem;
+  font-family:'Rajdhani',sans-serif;font-size:.86rem;outline:none;
+}
+.custom-message button {
+  padding:0 .55rem;font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:.08em;
+}
 @media (max-width: 520px), (max-height: 680px) {
-  .game-wrapper { gap:.42rem;padding-left:.45rem;padding-right:.45rem; }
+  .game-wrapper { gap:.42rem;padding-right:.45rem; }
   .game-topbar { gap:.35rem; }
   .topbar-right { gap:.25rem; }
   .conn-pill { font-size:.52rem;padding:.26rem .55rem;letter-spacing:.12em; }
+  // .quick-rail {
+  //   left:0;top:calc(.45rem + env(safe-area-inset-top));bottom:auto;
+  //   transform:none;flex-direction:column;
+  // }
+  .quick-button { width:40px;height:34px;border-radius:8px; }
+  .quick-popover {
+    left:0;top:calc(68px + .45rem + 10px);bottom:auto;transform:none;
+    width:min(300px,calc(100vw - 20px));max-height:52dvh;
+  }
+  .message-popover { width:min(320px,calc(100vw - 20px)); }
 }

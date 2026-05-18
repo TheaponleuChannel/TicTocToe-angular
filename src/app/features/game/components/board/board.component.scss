@@ -53,11 +53,16 @@
   background:rgba(255,209,102,.1);border-color:var(--draw);
   animation:winner-glow 1s ease-in-out infinite alternate;
 }
+.cell.last-move::before {
+  content:'';position:absolute;inset:14%;border:2px solid rgba(255,255,255,.92);
+  border-radius:50%;box-shadow:0 0 10px rgba(255,255,255,.55),inset 0 0 8px rgba(255,255,255,.2);
+  pointer-events:none;z-index:2;
+}
 .cell.is-new .cell-mark { animation:pop .28s cubic-bezier(.3,1.6,.5,1) forwards; }
 
 /* Mark */
 .cell-mark { font-family:'Orbitron',sans-serif;font-weight:900;line-height:1;
-  display:flex;align-items:center;justify-content:center; }
+  display:flex;align-items:center;justify-content:center;position:relative;z-index:3; }
 .mark-x { color:var(--x-color);text-shadow:var(--glow-x); }
 .mark-o { color:var(--o-color);text-shadow:var(--glow-o); }
 
