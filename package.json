@@ -12,6 +12,12 @@
     "preview": "npm run build && node server.js",
     "lint":    "ng lint"
   },
+  "fileReplacements": [
+    {
+      "replace": "src/environments/environment.ts",
+      "with": "src/environments/environment.production.ts"
+    }
+  ],
   "dependencies": {
     "@angular/animations":            "^18.0.0",
     "@angular/common":                "^18.0.0",
