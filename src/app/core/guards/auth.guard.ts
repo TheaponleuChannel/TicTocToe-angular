@@ -12,7 +12,10 @@ export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   const nick = store.nickname() || localStorage.getItem('ttt_nick') || '';
-  if (nick && nick.length >= 2) return true;
+  if (nick && nick.length >= 2) {
+    if (!store.nickname()) store.patch({ nickname: nick });
+    return true;
+  }
 
   router.navigate(['/auth']);
   return false;

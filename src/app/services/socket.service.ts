@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 export class SocketService {
   private socket: any = null;
   private socketClientLoading: Promise<void> | null = null;
+  private connecting: Promise<void> | null = null;
 
   constructor(
     private game:  GameService,
@@ -18,24 +19,48 @@ export class SocketService {
     private router: Router,
   ) {}
 
-  connect(): void {
+  connect(): Promise<void> {
+    if (this.socket?.connected) return Promise.resolve();
+    if (this.connecting) return this.connecting;
+
     if (typeof (window as any)['io'] === 'undefined') {
-      this.loadSocketClient()
-        .then(() => this.connect())
-        .catch(() => this.game.store.patch({ connected: false }));
-      return;
+      this.connecting = this.loadSocketClient()
+        .then(() => {
+          this.connecting = null;
+          return this.connect();
+        })
+        .catch(err => {
+          this.connecting = null;
+          this.game.store.patch({ connected: false });
+          throw err;
+        });
+      return this.connecting;
     }
-    if (this.socket?.connected) return;
-    try {
+
+    this.connecting = new Promise((resolve, reject) => {
       this.socket = (window as any)['io'](environment.socketUrl, {
         transports: ['websocket', 'polling'],
         reconnectionAttempts: 5,
       });
-      this.socket.on('connect',       () => this.game.store.patch({ connected: true }));
-      this.socket.on('disconnect',    () => this.game.store.patch({ connected: false }));
+      this.socket.once('connect', () => {
+        this.connecting = null;
+        this.game.store.patch({ connected: true });
+        resolve();
+      });
+      this.socket.once('connect_error', (err: unknown) => {
+        this.connecting = null;
+        this.game.store.patch({ connected: false });
+        reject(err);
+      });
+      this.socket.on('disconnect', () => this.game.store.patch({ connected: false }));
       this.socket.on('connect_error', () => this.game.store.patch({ connected: false }));
       this._registerHandlers();
-    } catch (e) { console.warn('[Socket]', e); }
+    });
+
+    return this.connecting.catch(e => {
+      console.warn('[Socket]', e);
+      throw e;
+    });
   }
 
   private loadSocketClient(): Promise<void> {
@@ -105,13 +130,21 @@ export class SocketService {
     s.on('room:error', (d: any) => { this.toast.show('⚠ ' + d.message, 'error'); this.sound.playError(); });
   }
 
-  createRoom(nickname: string): void {
-    if (!this.isAvailable()) { this.toast.show('Run: node server.js first', 'error', 5000); return; }
-    this.socket.emit('room:create', { nickname });
+  async createRoom(nickname: string): Promise<void> {
+    try {
+      await this.connect();
+      this.socket.emit('room:create', { nickname });
+    } catch {
+      this.toast.show('Could not connect to the game server', 'error', 5000);
+    }
   }
-  joinRoom(nickname: string, code: string): void {
-    if (!this.isAvailable()) { this.toast.show('Run: node server.js first', 'error', 5000); return; }
-    this.socket.emit('room:join', { nickname, code: code.toUpperCase().trim() });
+  async joinRoom(nickname: string, code: string): Promise<void> {
+    try {
+      await this.connect();
+      this.socket.emit('room:join', { nickname, code: code.toUpperCase().trim() });
+    } catch {
+      this.toast.show('Could not connect to the game server', 'error', 5000);
+    }
   }
   sendMove(code: string, index: number): void { this.socket?.emit('game:move', { code, index }); }
   requestRematch(code: string): void           { this.socket?.emit('game:rematch', { code }); }

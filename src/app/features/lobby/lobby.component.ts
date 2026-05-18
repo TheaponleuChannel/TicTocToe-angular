@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { ButtonComponent } from '../../shared/components/button/button.component
   templateUrl: './lobby.component.html',
   styleUrls: ['./lobby.component.scss'],
 })
-export class LobbyComponent {
+export class LobbyComponent implements OnInit {
   private store  = inject(GameStore);
   private socket = inject(SocketService);
   private toast  = inject(ToastService);
@@ -23,15 +23,19 @@ export class LobbyComponent {
   code = '';
   creating = false;
 
-  create(): void {
-    this.creating = true;
-    this.socket.connect();
-    this.socket.createRoom(this.store.nickname());
+  ngOnInit(): void {
+    this.socket.connect().catch(() => {});
   }
 
-  join(): void {
+  async create(): Promise<void> {
+    this.creating = true;
+    await this.socket.createRoom(this.store.nickname());
+    if (!this.socket.isAvailable()) this.creating = false;
+  }
+
+  async join(): Promise<void> {
     if (this.code.trim().length !== 6) { this.toast.show('Enter a 6-character code','error'); return; }
-    this.socket.joinRoom(this.store.nickname(), this.code);
+    await this.socket.joinRoom(this.store.nickname(), this.code);
   }
   back(): void { this.router.navigate(['/menu']); }
 }
