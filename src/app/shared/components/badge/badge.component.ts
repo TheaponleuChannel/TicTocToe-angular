@@ -17,6 +17,9 @@ import { CommonModule } from '@angular/common';
     .badge--o     { color:var(--o-color);border-color:rgba(255,77,166,.4);background:rgba(255,77,166,.08); }
     .badge--draw  { color:var(--draw);border-color:rgba(255,209,102,.4);background:rgba(255,209,102,.08); }
     .badge--dim   { color:var(--dim);border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.03); }
+    @media (max-width: 420px), (max-height: 640px) {
+      .badge { font-size:.52rem;letter-spacing:.1em;padding:.24rem .58rem; }
+    }
   `]
 })
 export class BadgeComponent {

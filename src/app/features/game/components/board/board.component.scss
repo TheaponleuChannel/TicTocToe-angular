@@ -1,4 +1,7 @@
-.board-outer { position:relative;display:flex;flex-direction:column;align-items:center;gap:.6rem;width:100%; }
+.board-outer {
+  position:relative;display:flex;flex-direction:column;align-items:center;gap:.45rem;
+  width:100%;height:100%;min-height:0;
+}
 
 /* Expanding state */
 .expanding .board-scroll { filter:blur(3px) brightness(.5);pointer-events:none;transition:filter .3s; }
@@ -8,7 +11,8 @@
   font-family:'Orbitron',sans-serif;font-size:clamp(.68rem,2.5vw,.95rem);font-weight:700;
   letter-spacing:.15em;color:var(--x-color);text-shadow:var(--glow-x);
   background:rgba(7,11,20,.92);border:1px solid var(--x-color);border-radius:12px;
-  padding:.9rem 1.8rem;white-space:nowrap;
+  width:min(92vw,420px);justify-content:center;text-align:center;
+  padding:.9rem 1rem;white-space:normal;
   animation:slide-in .35s ease both;display:flex;align-items:center;gap:.6rem;
 }
 .expand-icon { font-size:1.2em;animation:blink .8s step-end infinite; }
@@ -17,18 +21,20 @@
   font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:.2em;
   color:var(--dim);border:1px solid var(--border);border-radius:20px;
   padding:.28rem .85rem;background:rgba(255,255,255,.03);
+  max-width:100%;text-align:center;line-height:1.25;
 }
 
 .board-scroll {
-  overflow:auto;max-width:100%;max-height:calc(100dvh - 290px);border-radius:10px;
+  overflow:auto;max-width:100%;max-height:100%;border-radius:10px;
   border:1px solid var(--border);
   scrollbar-width:thin;scrollbar-color:rgba(0,220,255,.3) transparent;
-  transition:filter .3s;
+  transition:filter .3s;overscroll-behavior:contain;
+  touch-action:pan-x pan-y;
 }
 .board-scroll::-webkit-scrollbar { width:4px;height:4px; }
 .board-scroll::-webkit-scrollbar-thumb { background:rgba(0,220,255,.3);border-radius:4px; }
 
-.board { display:grid;gap:4px;padding:6px;background:var(--bg2);min-width:fit-content; }
+.board { display:grid;padding:6px;background:var(--bg2);min-width:fit-content; }
 
 /* Cell */
 .cell {
@@ -62,3 +68,10 @@
   opacity:0;border-radius:inherit;transition:opacity .3s;pointer-events:none;
 }
 .cell.is-new::after { opacity:1; }
+
+@media (max-width: 420px), (max-height: 640px) {
+  .board-outer { gap:.35rem; }
+  .grid-badge { font-size:.52rem;letter-spacing:.12em;padding:.22rem .62rem; }
+  .board { padding:5px; }
+  .cell { border-radius:4px; }
+}

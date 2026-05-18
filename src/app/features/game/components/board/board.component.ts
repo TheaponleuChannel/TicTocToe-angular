@@ -1,6 +1,6 @@
 import {
   Component, inject, computed, TrackByFunction,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy, HostListener, signal
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameStore }   from '../../../../store/game.store';
@@ -30,27 +30,41 @@ export class BoardComponent {
   readonly cells       = this.store.cells;
   readonly gridSize    = this.store.gridSize;
   readonly isExpanding = this.store.expanding;
+  private readonly viewport = signal(this.getViewport());
 
   readonly nextSize = computed(() => this.store.gridSize() * 2);
 
   /** Dynamic cell size: shrinks as grid grows */
   readonly cellPx = computed(() => {
     const sz = this.store.gridSize();
-    if (sz <= 12) return 44;
-    if (sz <= 24) return 30;
-    if (sz <= 48) return 20;
+    const vp = this.viewport();
+    const gap = this.cellGap();
+    const boardPadding = 12;
+    const maxBoard = Math.min(vp.width - 16, vp.height - 230, 572);
+    const fitCell = Math.floor((Math.max(maxBoard, 260) - boardPadding - (sz - 1) * gap) / sz);
+
+    if (sz <= 12) return Math.max(20, Math.min(44, fitCell));
+    if (sz <= 24) return 26;
+    if (sz <= 48) return 18;
     return 14;
   });
+
+  readonly cellGap = computed(() => this.store.gridSize() <= 12 ? 4 : 3);
 
   /** Total board pixel size for the grid container */
   readonly boardPx = computed(() => {
     const sz   = this.store.gridSize();
     const cell = this.cellPx();
-    return sz * cell + (sz - 1) * 4;
+    return sz * cell + (sz - 1) * this.cellGap();
   });
 
   /** CSS grid columns string */
   readonly gridCols = computed(() => `repeat(${this.store.gridSize()}, 1fr)`);
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.viewport.set(this.getViewport());
+  }
 
   trackCell: TrackByFunction<Cell> = (_, c) => c.index;
 
@@ -98,5 +112,10 @@ export class BoardComponent {
     if (result?.winner) {
       result.winner === 'draw' ? this.sound.playDraw() : this.sound.playWin();
     }
+  }
+
+  private getViewport(): { width: number; height: number } {
+    if (typeof window === 'undefined') return { width: 640, height: 720 };
+    return { width: window.innerWidth, height: window.innerHeight };
   }
 }

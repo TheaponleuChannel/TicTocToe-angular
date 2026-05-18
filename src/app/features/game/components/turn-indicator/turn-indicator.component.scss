@@ -1,9 +1,17 @@
 .turn-bar { display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.03);
   border:1px solid var(--border);border-radius:40px;padding:.5rem 1.3rem;
-  transition:border-color .3s;width:fit-content; }
+  transition:border-color .3s;width:fit-content;max-width:100%;min-width:0; }
 .turn-bar.x-turn { border-color:rgba(0,220,255,.45); }
 .turn-bar.o-turn { border-color:rgba(255,77,166,.45); }
 .turn-mark  { font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:900; }
-.turn-label { font-family:'Orbitron',sans-serif;font-size:.67rem;letter-spacing:.14em;color:var(--text); }
+.turn-label { font-family:'Orbitron',sans-serif;font-size:.67rem;letter-spacing:.14em;color:var(--text);
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
 .my-mark-badge { font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:.12em;
-  color:var(--dim);padding-left:.7rem;border-left:1px solid var(--border); }
+  color:var(--dim);padding-left:.7rem;border-left:1px solid var(--border);white-space:nowrap; }
+
+@media (max-width: 420px), (max-height: 640px) {
+  .turn-bar { gap:.42rem;padding:.38rem .75rem; }
+  .turn-mark { font-size:.9rem; }
+  .turn-label { font-size:.55rem;letter-spacing:.08em; }
+  .my-mark-badge { font-size:.52rem;letter-spacing:.08em;padding-left:.45rem; }
+}

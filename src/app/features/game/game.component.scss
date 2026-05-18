@@ -1,17 +1,22 @@
 .game-wrapper {
   position:relative;z-index:2;display:flex;flex-direction:column;
-  align-items:center;gap:.8rem;padding:.8rem .6rem 1.2rem;
-  width:100%;max-width:640px;
+  align-items:center;gap:clamp(.45rem,1.6dvh,.8rem);
+  padding:calc(.55rem + env(safe-area-inset-top)) .6rem calc(.7rem + env(safe-area-inset-bottom));
+  width:100%;max-width:720px;height:100dvh;min-height:0;overflow:hidden;
 }
 
 /* Top bar */
 .game-topbar {
   display:flex;align-items:center;justify-content:space-between;width:100%;gap:.5rem;
+  flex:0 0 auto;min-width:0;
 }
 .topbar-right { display:flex;gap:.4rem;align-items:center; }
 
 /* Turn row */
-.turn-row { display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;justify-content:center; }
+.turn-row {
+  display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;justify-content:center;
+  flex:0 0 auto;width:100%;min-width:0;
+}
 
 /* Multiplayer connection pill */
 .conn-pill {
@@ -22,3 +27,13 @@
 .conn-pill.online { color:var(--text);border-color:rgba(57,255,20,.4); }
 .conn-dot { width:7px;height:7px;border-radius:50%;background:var(--dim); }
 .conn-pill.online .conn-dot { background:#39ff14;box-shadow:0 0 8px #39ff14;animation:pulse 2s infinite; }
+
+app-scoreboard { width:100%;display:flex;justify-content:center;flex:0 0 auto; }
+app-board { width:100%;display:flex;justify-content:center;flex:1 1 auto;min-height:0; }
+
+@media (max-width: 520px), (max-height: 680px) {
+  .game-wrapper { gap:.42rem;padding-left:.45rem;padding-right:.45rem; }
+  .game-topbar { gap:.35rem; }
+  .topbar-right { gap:.25rem; }
+  .conn-pill { font-size:.52rem;padding:.26rem .55rem;letter-spacing:.12em; }
+}

@@ -13,6 +13,7 @@
   <div class="board-scroll">
     <div class="board"
          [style.grid-template-columns]="gridCols()"
+         [style.gap.px]="cellGap()"
          [style.width.px]="boardPx()"
          [style.height.px]="boardPx()">
 
